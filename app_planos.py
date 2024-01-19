@@ -105,7 +105,7 @@ def mapa():
     ).add_to(m)
 
     # call to render Folium map in Streamlit
-    st_data = st_folium(m, width=725)
+    st_folium(m, width=725,  returned_objects=[])
 
 def main():
     if not check_password():
@@ -123,9 +123,9 @@ def main():
     st.subheader("Pablo Carpintero")
     
     #st.write(puntero)
-    tab1, tab2, tab3 = st.tabs(["Conos", "Mapa", "Info"])
+    tab1, tab2 = st.tabs(["Conos", "Info"])
     with tab1:
-        st.markdown("""[Cono línea](#línea)   ::    [Cono área](#área)""",  unsafe_allow_html=True)
+        st.markdown("""[Cono línea](#línea)   ::    [Cono área](#área) :: [Mapa](#mapa)""",  unsafe_allow_html=True)
         st.subheader("Cono línea", anchor="línea")
         fig = px.line(puntero, x="x", y="y", 
                     title='Gaita de Bestué', height=altura,
@@ -151,11 +151,10 @@ def main():
         
         st.write('Relleno')
         st.plotly_chart(figa, theme="streamlit", use_container_width=True)
-    with tab2:
-        st.subheader("Mapa")
 
+        st.subheader("Mapa origen y medición", anchor="mapa")
         mapa()
-    with tab3:
+    with tab2:
         st.subheader("Datos de medición", anchor="datos")
         st.markdown("""
         * lugar de medición, 

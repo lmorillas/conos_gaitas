@@ -2,6 +2,8 @@ import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
 import hmac
+import folium
+from streamlit_folium import st_folium
 from csv import DictReader
 
 df = px.data.gapminder()
@@ -100,20 +102,47 @@ def check_password():
     return False
 
     
+def mapa():
+    # create a Folium Map object
+    m = folium.Map(location=[42.4170324,0.1386544], zoom_start=10)
+    
+    kw1 = { "color": "green", "icon": "home"}
+    kw2= { "color": "blue", "icon": "pencil"}
+    icon1 = folium.Icon( **kw1)
+    icon2 = folium.Icon( **kw2)
+    folium.Marker(
+        [42.5610168,0.1076872], popup="Bestué", tooltip="Bestué", icon=icon1
+    ).add_to(m)
+    folium.Marker(
+        [42.4170324,0.1386544], popup="Aínsa", tooltip="Aínsa", icon = icon2
+    ).add_to(m)
+
+    # call to render Folium map in Streamlit
+    st_data = st_folium(m, width=725)
 
 def main():
-    if not check_password():
-        st.stop()  # Do not continue if check_password is not True.
+    #if not check_password():
+    #    st.stop()  # Do not continue if check_password is not True.
     panel()
     puntero = grafica_de_csv() # '', 'blue', 'Bestué')
     altura = st.sidebar.slider('Altura del gráfico', 200, 1200, 600)
     anchura = st.sidebar.slider('Anchura del gráfico', 5, 40, int(max(puntero['x'])+1))  
     altura_punt = int(max(puntero['y']))  
     
+    st.divider()
+    st.sidebar.title("Menú")
+    st.sidebar.markdown("""
+    * [Cono línea](#línea)
+    * [Cono área](#área)
+    * [Mapa 🗺️](#mapa)
+    * [Datos de medición](#datos)
+    """,  unsafe_allow_html=True)
+    
     st.title("Análisis de conos de gaitas antiguas")
     st.subheader("Pablo Carpintero")
     
     #st.write(puntero)
+    st.subheader("Cono línea", anchor="línea")
     fig = px.line(puntero, x="x", y="y", 
                 title='Gaita de Bestué', height=altura,
                 )
@@ -123,6 +152,7 @@ def main():
 
     st.plotly_chart(fig, theme="streamlit", use_container_width=False)
 
+    st.subheader("Cono área", anchor="área")
     figa = go.Figure()
     figa.add_trace(go.Scatter(x=puntero['x'], y=puntero['y'],
         fill='tozerox',
@@ -137,6 +167,21 @@ def main():
     
     st.write('Relleno')
     st.plotly_chart(figa, theme="streamlit", use_container_width=True)
+
+    st.subheader("Mapa")
+
+    mapa()
+
+    st.subheader("Datos de medición", anchor="datos")
+    st.markdown("""
+    * lugar de medición, 
+    * fecha,
+    * fotos
+    * medidas
+    * grabaciones
+    * etc
+    """)
+    
 
 if __name__ == "__main__":
     main()

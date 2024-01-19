@@ -6,19 +6,6 @@ import folium
 from streamlit_folium import st_folium
 from csv import DictReader
 
-df = px.data.gapminder()
-
-fig = px.scatter(
-    df.query("year==2007"),
-    x="gdpPercap",
-    y="lifeExp",
-    size="pop",
-    color="continent",
-    hover_name="country",
-    log_x=True,
-    size_max=60,
-)
-
 # Funciones auxiliares para el digujo
 def punto(x):
     return x.replace(',', '.')
@@ -124,63 +111,60 @@ def main():
     if not check_password():
         st.stop()  # Do not continue if check_password is not True.
     panel()
+    
     puntero = grafica_de_csv() # '', 'blue', 'Bestué')
     altura = st.sidebar.slider('Altura del gráfico', 200, 1200, 600)
     anchura = st.sidebar.slider('Anchura del gráfico', 5, 100, int(max(puntero['x'])+1))  
     altura_punt = int(max(puntero['y']))  
     
     st.sidebar.divider()
-    st.sidebar.title("Menú")
-    st.sidebar.markdown("""
-    * [Cono línea](#línea)
-    * [Cono área](#área)
-    * [Mapa 🗺️](#mapa)
-    * [Datos de medición](#datos)
-    """,  unsafe_allow_html=True)
-    
+            
     st.title("Análisis de conos de gaitas antiguas")
     st.subheader("Pablo Carpintero")
     
     #st.write(puntero)
-    st.subheader("Cono línea", anchor="línea")
-    fig = px.line(puntero, x="x", y="y", 
-                title='Gaita de Bestué', height=altura,
-                )
-    
-    fig.update_layout(xaxis_range=[-1 * anchura,anchura])
-    
+    tab1, tab2, tab3 = st.tabs(["Conos", "Mapa", "Info"])
+    with tab1:
+        st.markdown("""[Cono línea](#línea)   ::    [Cono área](#área)""",  unsafe_allow_html=True)
+        st.subheader("Cono línea", anchor="línea")
+        fig = px.line(puntero, x="x", y="y", 
+                    title='Gaita de Bestué', height=altura,
+                    )
+        
+        fig.update_layout(xaxis_range=[-1 * anchura,anchura])
+        
 
-    st.plotly_chart(fig, theme="streamlit", use_container_width=False)
+        st.plotly_chart(fig, theme="streamlit", use_container_width=False)
 
-    st.subheader("Cono área", anchor="área")
-    figa = go.Figure()
-    figa.add_trace(go.Scatter(x=puntero['x'], y=puntero['y'],
-        fill='tozerox',
-        mode='lines',
-        line_color='yellow',
-        ),
+        st.subheader("Cono área", anchor="área")
+        figa = go.Figure()
+        figa.add_trace(go.Scatter(x=puntero['x'], y=puntero['y'],
+            fill='tozerox',
+            mode='lines',
+            line_color='yellow',
+            ),
 
-    )
-    figa.update_layout(xaxis_range=[-1 * anchura,anchura], 
-                       yaxis_range=[0 , altura_punt + 30],
-                       height=altura)
-    
-    st.write('Relleno')
-    st.plotly_chart(figa, theme="streamlit", use_container_width=True)
+        )
+        figa.update_layout(xaxis_range=[-1 * anchura,anchura], 
+                        yaxis_range=[0 , altura_punt + 30],
+                        height=altura)
+        
+        st.write('Relleno')
+        st.plotly_chart(figa, theme="streamlit", use_container_width=True)
+    with tab2:
+        st.subheader("Mapa")
 
-    st.subheader("Mapa")
-
-    mapa()
-
-    st.subheader("Datos de medición", anchor="datos")
-    st.markdown("""
-    * lugar de medición, 
-    * fecha,
-    * fotos
-    * medidas
-    * grabaciones
-    * etc
-    """)
+        mapa()
+    with tab3:
+        st.subheader("Datos de medición", anchor="datos")
+        st.markdown("""
+        * lugar de medición, 
+        * fecha,
+        * fotos
+        * medidas
+        * grabaciones
+        * etc
+        """)
     
 
 if __name__ == "__main__":

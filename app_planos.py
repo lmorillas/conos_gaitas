@@ -102,8 +102,8 @@ def check_password():
     
 
 def main():
-    # if not check_password():
-    #     st.stop()  # Do not continue if check_password is not True.
+    if not check_password():
+        st.stop()  # Do not continue if check_password is not True.
     panel()
     puntero = grafica_de_csv() # '', 'blue', 'Bestué')
     altura = st.sidebar.slider('Altura del gráfico', 200, 1200, 600)

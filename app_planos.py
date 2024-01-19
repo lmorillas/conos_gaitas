@@ -126,10 +126,10 @@ def main():
     panel()
     puntero = grafica_de_csv() # '', 'blue', 'Bestué')
     altura = st.sidebar.slider('Altura del gráfico', 200, 1200, 600)
-    anchura = st.sidebar.slider('Anchura del gráfico', 5, 40, int(max(puntero['x'])+1))  
+    anchura = st.sidebar.slider('Anchura del gráfico', 5, 100, int(max(puntero['x'])+1))  
     altura_punt = int(max(puntero['y']))  
     
-    st.divider()
+    st.sidebar.divider()
     st.sidebar.title("Menú")
     st.sidebar.markdown("""
     * [Cono línea](#línea)

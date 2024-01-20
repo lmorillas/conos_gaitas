@@ -96,7 +96,7 @@ def check_password():
     
 def mapa(puntero: dict):
     # create a Folium Map object
-    m = folium.Map(location=[42.4170324,0.1386544], zoom_start=10)
+    m = folium.Map(location=puntero.get('lugar_medicion'), zoom_start=10)
     
     kw1 = { "color": "green", "icon": "home"}
     kw2= { "color": "blue", "icon": "pencil"}

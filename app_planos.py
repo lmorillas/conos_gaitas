@@ -18,13 +18,10 @@ def procesa_cono(lista, long_total):
     return [(float(punto(x.get('diametro_cono')))/2, 
             float(punto(x.get('long_cono')))) for x in lista]
 
-def grafica_de_csv(fcsv="", color="", label=""):
+def grafica_de_csv(cono):
     #hoja = DictReader(open(fcsv))
-    if not fcsv:
-        cono = st.secrets["conos"]["bestue"]
-        hoja = DictReader(cono.splitlines())
-    else:
-        hoja = DictReader(open(fcsv))
+    hoja = DictReader(cono.splitlines())
+    
     datos = [a for a in hoja]
     nombre = [m.get('nombre') for m in datos if m.get('nombre')][0]
 
@@ -54,15 +51,23 @@ def grafica_de_csv(fcsv="", color="", label=""):
     x_.reverse()
     x = x + x_
     y = y + y_
-
+    coord_origen = [m.get('coord_origen') for m in datos if m.get('coord_origen')][0]
+    coord_medicion = [m.get('coord_medicion') for m in datos if m.get('coord_medicion')][0]
+    lugar_origen = [m.get('lugar_origen') for m in datos if m.get('lugar_origen')][0]
+    lugar_medicion = [m.get('lugar_medicion') for m in datos if m.get('lugar_medicion')][0]
     return {'nombre': nombre,
             'x': x,
-            'y': y}
+            'y': y,
+            'coord_origen': [float(x) for x in coord_origen.split(',')],
+            'coord_medicion': [float(x) for x in coord_medicion.split(',')],
+            'lugar_origen': lugar_origen,
+            'lugar_medicion': lugar_medicion
+            }
 
 
 def panel():
     st.sidebar.title("Panel de selección")
-    st.sidebar.selectbox("Gaita", ["Bestué", "Robres", "Santa Justa"])
+    
     
 
 def check_password():
@@ -89,7 +94,7 @@ def check_password():
     return False
 
     
-def mapa():
+def mapa(puntero: dict):
     # create a Folium Map object
     m = folium.Map(location=[42.4170324,0.1386544], zoom_start=10)
     
@@ -98,37 +103,62 @@ def mapa():
     icon1 = folium.Icon( **kw1)
     icon2 = folium.Icon( **kw2)
     folium.Marker(
-        [42.5610168,0.1076872], popup="Bestué", tooltip="Bestué", icon=icon1
+        puntero.get('coord_origen'), popup=puntero.get('lugar_origen'), 
+        tooltip=puntero.get('lugar_origen'), icon=icon1
     ).add_to(m)
     folium.Marker(
-        [42.4170324,0.1386544], popup="Aínsa", tooltip="Aínsa", icon = icon2
+        puntero.get('coord_medicion'), popup=puntero.get('lugar_medicion'), 
+        tooltip=puntero.get('lugar_medicion'), icon = icon2
     ).add_to(m)
 
     # call to render Folium map in Streamlit
     st_folium(m, width=725,  returned_objects=[])
 
+
+#@st.cache
+def carga_datos():
+    datos = st.secrets["conos"]
+    conos = [k for k in datos.keys()]
+    conos_dict = {k: grafica_de_csv(datos[k]) for k in conos}
+    return conos_dict
+
 def main():
     if not check_password():
         st.stop()  # Do not continue if check_password is not True.
     panel()
+
+    mis_conos = carga_datos()
+    nombres = {mis_conos[k]['nombre']:k for k in mis_conos.keys()}
+    cono_sel = st.sidebar.selectbox("Gaita", sorted(list(nombres)),
+                                    index=0, 
+                                    key="cono", placeholder="Selecciona una gaita")    
     
-    puntero = grafica_de_csv() # '', 'blue', 'Bestué')
+
+    #st.write(cono_sel)
+    cono_sel = nombres[cono_sel]
+    
+
+    puntero = mis_conos[cono_sel] # '', 'blue', 'Bestué')
+    cono={}
+    cono['x'] = puntero['x']
+    cono['y'] = puntero['y']
     altura = st.sidebar.slider('Altura del gráfico', 200, 1200, 600)
-    anchura = st.sidebar.slider('Anchura del gráfico', 5, 100, int(max(puntero['x'])+1))  
-    altura_punt = int(max(puntero['y']))  
+    anchura = st.sidebar.slider('Anchura del gráfico', 5, 100, int(max(cono['x'])+1))  
+    altura_punt = int(max(cono['y']))  
     
     st.sidebar.divider()
             
     st.title("Análisis de conos de gaitas antiguas")
     st.subheader("Pablo Carpintero")
-    
-    #st.write(puntero)
+    st.divider()
+    st.subheader(puntero['nombre'])
     tab1, tab2 = st.tabs(["Conos", "Info"])
     with tab1:
         st.markdown("""[Cono línea](#línea)   ::    [Cono área](#área) :: [Mapa](#mapa)""",  unsafe_allow_html=True)
         st.subheader("Cono línea", anchor="línea")
-        fig = px.line(puntero, x="x", y="y", 
-                    title='Gaita de Bestué', height=altura,
+        fig = px.line(cono, x="x", y="y", 
+                    #title=puntero['nombre'],
+                    height=altura,
                     )
         
         fig.update_layout(xaxis_range=[-1 * anchura,anchura])
@@ -153,7 +183,7 @@ def main():
         st.plotly_chart(figa, theme="streamlit", use_container_width=True)
 
         st.subheader("Mapa origen y medición", anchor="mapa")
-        mapa()
+        mapa( puntero )
     with tab2:
         st.subheader("Datos de medición", anchor="datos")
         st.markdown("""

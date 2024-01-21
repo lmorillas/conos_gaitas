@@ -140,6 +140,7 @@ ar BasemapAT_surface = L.tileLayer('https://mapsneu.wien.gv.at/basemap/bmapoberf
 
 
 
+
 '''
     
     kw1 = { "color": "red", "icon": "home"}
@@ -167,8 +168,8 @@ def carga_datos():
     return conos_dict
 
 def main():
-    # if not check_password():
-    #     st.stop()  # Do not continue if check_password is not True.
+    if not check_password():
+        st.stop()  # Do not continue if check_password is not True.
     panel()
 
     mis_conos = carga_datos()

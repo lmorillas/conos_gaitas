@@ -93,56 +93,50 @@ def check_password():
         st.error("😕 Password incorrect")
     return False
 
+def tipo_mapa():
+    st.sidebar.title("Tipo de mapa")
+    tipo = st.sidebar.radio("Tipo de mapa", ["Topográfico", 
+                                            #"StamenTerrain", 
+                                            #"Thunderforest_Outdoors",
+                                            "Esri_WorldImagery", "Esri_WorldShadedRelief",
+                                            #"Esri_WorldPhysical", 
+                                            #"BasemapAT_surface"
+                                             ])
+    return tipo
+
     
 def mapa(puntero: dict):
+    _tiles = {
+        'Topográfico': {'tiles': 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+                             'attr': 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'},
+        'StamenTerrain': {'tiles': 'https://tiles.stadiamaps.com/tiles/stamen_terrain_background/{z}/{x}/{y}{r}.{ext}',
+                                'attr': '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'},
+        "Thunderforest_Outdoors": {'tiles': 'https://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey={apikey}',
+                                    'attr': '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'},
+        "Esri_WorldImagery": {'tiles': 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+                                'attr': 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'},
+        "Esri_WorldShadedRelief": {'tiles': 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}',
+                                            'attr': 'Tiles &copy; Esri &mdash; Source: Esri'},
+        "Esri_WorldPhysical": {'tiles': 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}',
+                                        'attr': 'Tiles &copy; Esri &mdash; Source: US National Park Service'},
+        "BasemapAT_surface": {'tiles': 'https://mapsneu.wien.gv.at/basemap/bmapoberflaeche/{type}/google3857/{z}/{y}/{x}.{format}', 
+                                        'attr': 'Datenquelle: <a href="https://www.basemap.at">basemap.at</a>'}
+                }
+    
+    tipo = tipo_mapa()
+    tiles = _tiles[tipo]['tiles']
+    attr = _tiles[tipo]['attr']
+        
     # create a Folium Map object
     m = folium.Map(location=puntero.get('coord_medicion'), zoom_start=10,
-                   tiles = 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
-                   attr = 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+                    #tiles = 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+                    #attr = 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+                    tiles = tiles,
+                    attr = attr
+
     )
 
-    tiles = '''
-var Stadia_StamenTerrainBackground = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_terrain_background/{z}/{x}/{y}{r}.{ext}', {
-	minZoom: 0,
-	maxZoom: 18,
-	attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-	ext: 'png'
-});
-
-
-var Thunderforest_Outdoors = L.tileLayer('https://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey={apikey}', {
-	attribution: '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-	apikey: '<your apikey>',
-	maxZoom: 22
-});
-
-var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-});
-
-var Esri_WorldShadedRelief = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}', {
-	attribution: 'Tiles &copy; Esri &mdash; Source: Esri',
-	maxZoom: 13
-});
-
-var Esri_WorldPhysical = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}', {
-	attribution: 'Tiles &copy; Esri &mdash; Source: US National Park Service',
-	maxZoom: 8
-});
-
-ar BasemapAT_surface = L.tileLayer('https://mapsneu.wien.gv.at/basemap/bmapoberflaeche/{type}/google3857/{z}/{y}/{x}.{format}', {
-	maxZoom: 19,
-	attribution: 'Datenquelle: <a href="https://www.basemap.at">basemap.at</a>',
-	type: 'grau',
-	format: 'jpeg',
-	bounds: [[46.35877, 8.782379], [49.037872, 17.189532]]
-});
-
-
-
-
-'''
-    
+ 
     kw1 = { "color": "red", "icon": "home"}
     kw2= { "color": "purple", "icon": "pencil"}
     icon1 = folium.Icon( **kw1)

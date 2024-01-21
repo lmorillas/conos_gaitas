@@ -96,7 +96,7 @@ def check_password():
 def tipo_mapa():
     st.sidebar.title("Tipo de mapa")
     tipo = st.sidebar.radio("Tipo de mapa", ["Topográfico", 
-                                            #"StamenTerrain", 
+                                            "StamenTerrain", 
                                             #"Thunderforest_Outdoors",
                                             "Esri_WorldImagery", "Esri_WorldShadedRelief",
                                             #"Esri_WorldPhysical", 
@@ -109,7 +109,7 @@ def mapa(puntero: dict):
     _tiles = {
         'Topográfico': {'tiles': 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
                              'attr': 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'},
-        'StamenTerrain': {'tiles': 'https://tiles.stadiamaps.com/tiles/stamen_terrain_background/{z}/{x}/{y}{r}.{ext}',
+        'StamenTerrain': {'tiles': 'https://tiles.stadiamaps.com/tiles/stamen_terrain_background/{z}/{x}/{y}{r}.png',
                                 'attr': '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'},
         "Thunderforest_Outdoors": {'tiles': 'https://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey={apikey}',
                                     'attr': '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'},
@@ -119,7 +119,7 @@ def mapa(puntero: dict):
                                             'attr': 'Tiles &copy; Esri &mdash; Source: Esri'},
         "Esri_WorldPhysical": {'tiles': 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}',
                                         'attr': 'Tiles &copy; Esri &mdash; Source: US National Park Service'},
-        "BasemapAT_surface": {'tiles': 'https://mapsneu.wien.gv.at/basemap/bmapoberflaeche/{type}/google3857/{z}/{y}/{x}.{format}', 
+        "BasemapAT_surface": {'tiles': 'https://mapsneu.wien.gv.at/basemap/bmapoberflaeche/grau/google3857/{z}/{y}/{x}.jpeg', 
                                         'attr': 'Datenquelle: <a href="https://www.basemap.at">basemap.at</a>'}
                 }
     

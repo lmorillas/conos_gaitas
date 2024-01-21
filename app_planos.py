@@ -97,11 +97,53 @@ def check_password():
 def mapa(puntero: dict):
     # create a Folium Map object
     m = folium.Map(location=puntero.get('coord_medicion'), zoom_start=10,
-                   tiles="Stamen Terrain",
-                    attr='Map data © OpenStreetMap contributors, CC-BY-SA, Imagery © Mapbox')
+                   tiles = 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+                   attr = 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+    )
+
+    '''
+var Stadia_StamenTerrainBackground = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_terrain_background/{z}/{x}/{y}{r}.{ext}', {
+	minZoom: 0,
+	maxZoom: 18,
+	attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+	ext: 'png'
+});
+
+
+var Thunderforest_Outdoors = L.tileLayer('https://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey={apikey}', {
+	attribution: '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+	apikey: '<your apikey>',
+	maxZoom: 22
+});
+
+var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+});
+
+var Esri_WorldShadedRelief = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Source: Esri',
+	maxZoom: 13
+});
+
+var Esri_WorldPhysical = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Source: US National Park Service',
+	maxZoom: 8
+});
+
+ar BasemapAT_surface = L.tileLayer('https://mapsneu.wien.gv.at/basemap/bmapoberflaeche/{type}/google3857/{z}/{y}/{x}.{format}', {
+	maxZoom: 19,
+	attribution: 'Datenquelle: <a href="https://www.basemap.at">basemap.at</a>',
+	type: 'grau',
+	format: 'jpeg',
+	bounds: [[46.35877, 8.782379], [49.037872, 17.189532]]
+});
+
+
+
+'''
     
-    kw1 = { "color": "green", "icon": "home"}
-    kw2= { "color": "blue", "icon": "pencil"}
+    kw1 = { "color": "red", "icon": "home"}
+    kw2= { "color": "purple", "icon": "pencil"}
     icon1 = folium.Icon( **kw1)
     icon2 = folium.Icon( **kw2)
     folium.Marker(

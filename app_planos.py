@@ -96,7 +96,9 @@ def check_password():
     
 def mapa(puntero: dict):
     # create a Folium Map object
-    m = folium.Map(location=puntero.get('coord_medicion'), zoom_start=10)
+    m = folium.Map(location=puntero.get('coord_medicion'), zoom_start=10,
+                   tiles="Stamen Terrain",
+                    attr='Map data © OpenStreetMap contributors, CC-BY-SA, Imagery © Mapbox')
     
     kw1 = { "color": "green", "icon": "home"}
     kw2= { "color": "blue", "icon": "pencil"}
@@ -123,8 +125,8 @@ def carga_datos():
     return conos_dict
 
 def main():
-    if not check_password():
-        st.stop()  # Do not continue if check_password is not True.
+    # if not check_password():
+    #     st.stop()  # Do not continue if check_password is not True.
     panel()
 
     mis_conos = carga_datos()

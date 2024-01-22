@@ -100,12 +100,15 @@ def tipo_mapa():
                                             #"Thunderforest_Outdoors",
                                             "Esri_WorldImagery", "Esri_WorldShadedRelief",
                                             #"Esri_WorldPhysical", 
-                                            #"BasemapAT_surface"
+                                            #"BasemapAT_surface",
+                                            'Mapbox Outdoors',
+                                            'Mapbox Terrain2'
                                              ])
     return tipo
 
     
 def mapa(puntero: dict):
+    mytoken = 'pk.eyJ1IjoibG1vcmlsbGFzIiwiYSI6ImNscm5zMDQxdDB3YTEyaXFqaGs4enhrODIifQ.wHS3yLSW0f-frRNl0g8GAw'
     _tiles = {
         'Topográfico': {'tiles': 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
                              'attr': 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'},
@@ -120,7 +123,12 @@ def mapa(puntero: dict):
         "Esri_WorldPhysical": {'tiles': 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}',
                                         'attr': 'Tiles &copy; Esri &mdash; Source: US National Park Service'},
         "BasemapAT_surface": {'tiles': 'https://mapsneu.wien.gv.at/basemap/bmapoberflaeche/grau/google3857/{z}/{y}/{x}.jpeg', 
-                                        'attr': 'Datenquelle: <a href="https://www.basemap.at">basemap.at</a>'}
+                                        'attr': 'Datenquelle: <a href="https://www.basemap.at">basemap.at</a>'},
+        'Mapbox Outdoors': {'tiles': 'https://api.mapbox.com/styles/v1/mapbox/outdoors-v11/tiles/{z}/{x}/{y}?access_token=' + mytoken,
+                            'attr': 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, Imagery &copy; <a href="https://www.mapbox.com/">Mapbox</a>'},
+        'Mapbox Terrain2': {'tiles': 'https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.pngraw?access_token=' + mytoken,
+                            'attr': 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, Imagery &copy; <a href="https://www.mapbox.com/">Mapbox</a>'},
+        
                 }
     
     tipo = tipo_mapa()

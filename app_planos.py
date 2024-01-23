@@ -167,6 +167,7 @@ def carga_datos():
     datos = st.secrets["conos"]
     conos = [k for k in datos.keys()]
     conos_dict = {k: grafica_de_csv(datos[k]) for k in conos}
+    st.write(conos)
     return conos_dict
 
 def main():

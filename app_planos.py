@@ -214,21 +214,21 @@ def main():
 
         st.plotly_chart(fig, theme="streamlit", use_container_width=False)
 
-        st.subheader("Cono área", anchor="área")
-        figa = go.Figure()
-        figa.add_trace(go.Scatter(x=puntero['x'], y=puntero['y'],
-            fill='tozerox',
-            mode='lines',
-            line_color='yellow',
-            ),
+        # st.subheader("Cono área", anchor="área")
+        # figa = go.Figure()
+        # figa.add_trace(go.Scatter(x=puntero['x'], y=puntero['y'],
+        #     fill='tozerox',
+        #     mode='lines',
+        #     line_color='yellow',
+        #     ),
 
-        )
-        figa.update_layout(xaxis_range=[-1 * anchura,anchura], 
-                        yaxis_range=[0 , altura_punt + 30],
-                        height=altura)
+        # )
+        # figa.update_layout(xaxis_range=[-1 * anchura,anchura], 
+        #                 yaxis_range=[0 , altura_punt + 30],
+        #                 height=altura)
         
-        st.write('Relleno')
-        st.plotly_chart(figa, theme="streamlit", use_container_width=True)
+        # st.write('Relleno')
+        # st.plotly_chart(figa, theme="streamlit", use_container_width=True)
 
         st.subheader("Mapa origen y medición", anchor="mapa")
         mapa( puntero )

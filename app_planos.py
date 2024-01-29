@@ -191,7 +191,8 @@ def main():
     cono['x'] = puntero['x']
     cono['y'] = puntero['y']
     altura = st.sidebar.slider('Altura del gráfico', 200, 1200, 600)
-    anchura = st.sidebar.slider('Anchura del gráfico', 5, 100, int(max(cono['x'])+1))  
+    #anchura = st.sidebar.slider('Anchura del gráfico', 5, 100, int(max(cono['x'])+1))  
+    anchura = st.sidebar.slider('Proporción anchura', 0.04, 1.0, 0.35)  
     altura_punt = int(max(cono['y']))  
     
     st.sidebar.divider()
@@ -209,7 +210,12 @@ def main():
                     height=altura,
                     )
         
-        fig.update_layout(xaxis_range=[-1 * anchura,anchura])
+        #fig.update_layout(xaxis_range=[-1 * anchura,anchura])
+
+        fig.update_yaxes(
+            scaleanchor="x",
+            scaleratio=anchura,
+            )
         
 
         st.plotly_chart(fig, theme="streamlit", use_container_width=False)
